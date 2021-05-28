@@ -1,0 +1,15 @@
+.idea
+__pycache__
+*.swo
+*.swp
+.env
+config.py
+data
+csr
+*.key
+*.pem
+*.csr
+*.cer
+*.pfx
+*.crt
+venv
