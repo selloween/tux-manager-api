@@ -29,12 +29,14 @@ class TagItem2TagItem(SAFRSBase, db.Model):
     ti_dst_id = db.Column(db.Integer, db.ForeignKey('tagitem.ti_id'), nullable=False)
     ti_src = db.relationship("TagItem", foreign_keys=[ti_src_id])
     ti_dst = db.relationship("TagItem", foreign_keys=[ti_dst_id])
+    reltype_id = db.Column(db.Integer, db.ForeignKey("reltype.id"))
+    reltype = db.relationship("RelType")
 
 
 class RelType(SAFRSBase, db.Model):
     __tablename__ = "reltype"
-    reltype_id = db.Column(db.Integer, primary_key=True)
-    reltype_type = db.Column(db.String(80), nullable=False)
+    id = db.Column(db.Integer, primary_key=True)
+    type = db.Column(db.String(80), nullable=False)
 
 
 class Csr(SAFRSBase, db.Model):
