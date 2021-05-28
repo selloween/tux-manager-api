@@ -39,6 +39,7 @@ class RelType(SAFRSBase, db.Model):
     name = db.Column(db.String(80), nullable=False)
 
 #ondelete="CASCADE"
+
 class Csr(SAFRSBase, db.Model):
     __tablename__ = "csr"
     id = db.Column(db.Integer, primary_key=True)
@@ -91,27 +92,64 @@ def create_app(config_filename=None, host="localhost"):
             "id": 3,
             "name": "cert"
         }
-        owner_tag = {
+        csr_tag = {
             "id": 4,
+            "name": "csr"
+        }
+        owner_tag = {
+            "id": 5,
             "name": "owner"
         }
         stage_tag = {
-            "id": 5,
+            "id": 6,
             "name": "stage"
         }
         patch_group_tag = {
-            "id": 6,
+            "id": 7,
             "name": "patch_group"
         }
 
-        tags = (server_tag, ip_tag, cert_tag, owner_tag, stage_tag, patch_group_tag)
+        tags = (server_tag, ip_tag, cert_tag, csr_tag,  owner_tag, stage_tag, patch_group_tag)
 
         for tag in tags:
             Tag(id=tag["id"], name=tag["name"])
 
+        rel_server2ip = {
+            "id": 1,
+            "name": "server2ip"
+        }
+        rel_server2cert = {
+            "id": 2,
+            "name": "server2cert"
+        }
+        rel_server2owner = {
+            "id": 3,
+            "name": "server2owner"
+        }
+        rel_server2stage = {
+            "id": 4,
+            "name": "server2owner"
+        }
+        rel_server2patch_group = {
+            "id": 5,
+            "name": "server2patch_group"
+        }
+        rel_cert2ip = {
+            "id": 6,
+            "name": "cert2ip"
+        }
+        rel_cert2csr = {
+            "id": 7,
+            "name": "cert2csr"
+        }
 
+        reltypes = (rel_server2ip, rel_server2cert, rel_server2owner, rel_server2stage, rel_server2patch_group, rel_cert2ip, rel_cert2csr)
+
+        for reltype in reltypes:
+            RelType(id=reltype["id"], name=reltype["name"])
 
         create_api(app, host)
+
         return app
 
 
