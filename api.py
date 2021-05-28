@@ -2,7 +2,7 @@ from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from safrs import SAFRSBase, SAFRSAPI, jsonapi_rpc
 from gen_csr import gen_csr
-import datetime
+#import datetime
 import config
 
 db = SQLAlchemy()
@@ -18,8 +18,26 @@ class TagItem(SAFRSBase, db.Model):
     __tablename__ = "tagitem"
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(80), nullable=False)
+    content = db.Column(db.Text())
     tag_id = db.Column(db.Integer, db.ForeignKey("tag.id"), nullable=False)
     tag = db.relationship("Tag")
+
+    @jsonapi_rpc(http_methods=['POST'])
+    def create_csr(self):
+        '''
+            description : Create new CSR
+        '''
+
+        if self.tag_id == 3:
+            csr_content = gen_csr(self.name)
+            csr_tagitem = TagItem(name=self.name, content=csr_content, tag_id=4)
+            cert2csr = TagItem2TagItem(tagitem_src_id=self.id, tagitem_dst_id=csr_tagitem.id, reltype_id=7)
+
+            return {cert2csr}
+
+        else:
+
+            return {'result': 'wrong tag id'}
 
 
 class TagItem2TagItem(SAFRSBase, db.Model):
@@ -40,24 +58,6 @@ class RelType(SAFRSBase, db.Model):
 
 #ondelete="CASCADE"
 
-class Csr(SAFRSBase, db.Model):
-    __tablename__ = "csr"
-    id = db.Column(db.Integer, primary_key=True)
-    created = db.Column(db.DateTime, default=datetime.datetime.now())
-    domain = db.Column(db.String(80), nullable=False)
-    csr = db.Column(db.Text())
-    http_methods = {"GET", "POST"}  # only allow GET and POST
-
-    @jsonapi_rpc(http_methods=['POST'])
-    def generate_csr(self):
-        '''
-            description : Generate CSR
-        '''
-        new_csr = gen_csr(self.domain)
-        update_csr = Csr(id=self.id, domain=self.domain, csr=new_csr)
-
-        return {update_csr}
-
 
 def create_api(app, HOST="localhost", PORT=5010, API_PREFIX=""):
     api = SAFRSAPI(app, host=HOST, port=PORT, prefix=API_PREFIX)
@@ -65,7 +65,6 @@ def create_api(app, HOST="localhost", PORT=5010, API_PREFIX=""):
     api.expose_object(TagItem)
     api.expose_object(TagItem2TagItem)
     api.expose_object(RelType)
-    api.expose_object(Csr)
     print("Starting API: http://{}:{}/{}".format(HOST, PORT, API_PREFIX))
 
 
