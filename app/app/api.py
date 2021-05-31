@@ -2,7 +2,6 @@ from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from safrs import SAFRSBase, SAFRSAPI, jsonapi_rpc
 from gen_csr import gen_csr
-#import datetime
 import config
 
 db = SQLAlchemy()
@@ -155,6 +154,6 @@ def create_app(config_filename=None, host="localhost"):
 app = create_app(host="localhost")
 
 
-if __name__ == "__main__":
-    # Start application
-    app.run(port=5010, debug=True)
+#if __name__ == "__main__":
+#    # Start application
+#    app.run(port=5010, debug=True)

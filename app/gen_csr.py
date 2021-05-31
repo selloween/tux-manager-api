@@ -6,7 +6,7 @@ import sys
 from OpenSSL.SSL import FILETYPE_PEM
 from OpenSSL.crypto import (dump_certificate_request, PKey, TYPE_RSA, X509Req, X509Extension)
 
-from config import CSR_CONFIG
+from config import (CSR_CONFIG)
 
 
 def create_csr(domain, csr_file_path, key_file_path):

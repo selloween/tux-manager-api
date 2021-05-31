@@ -3,7 +3,7 @@ __pycache__
 *.swo
 *.swp
 .env
-config.py
+app/config.py
 data
 csr
 *.key

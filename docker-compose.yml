@@ -2,6 +2,18 @@ version: '3.1'
 
 services:
 
+  app:
+    container_name: tux_api
+    image: tux_api:latest
+    restart: always
+    ports:
+      - 8080:8080
+    depends_on:
+      - db
+    volumes:
+      - "./app:/app"
+
+
   db:
     container_name: tux_db
     restart: always
@@ -15,3 +27,4 @@ services:
       MYSQL_DATABASE: $MYSQL_DATABASE
       MYSQL_USER: $MYSQL_USER
       MYSQL_PASSWORD: $MYSQL_PASSWORD
+
